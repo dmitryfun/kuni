@@ -8,6 +8,7 @@ RUN --mount=type=cache,id=kuniman-pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile --store-dir=/pnpm/store
 
 FROM dependencies AS builder
+ENV NODE_OPTIONS=--max-old-space-size=768
 COPY . .
 RUN pnpm typecheck && pnpm test && pnpm build
 

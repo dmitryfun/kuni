@@ -30,7 +30,7 @@ elif tool == 'curl':
 elif tool == 'docker':
     if args == ['ps', '-q']: print('caddy-id')
     elif args[:1] == ['inspect'] and '--format' not in args:
-        print(json.dumps([{'Id':'caddy-id','Name':'/caddy','State':{'Running':True},'Mounts':[{'Type':'bind','Source':str(root/'Caddyfile'),'Destination':'/etc/caddy/Caddyfile'}],'NetworkSettings':{'Networks':{'existing-network':{}}}}]))
+        print(json.dumps([{'Id':'caddy-id','Name':'/caddy','State':{'Running':True},'Mounts':[{'Type':'bind','Source':str(root/'Caddyfile'),'Destination':'/etc/caddy/Caddyfile'}],'NetworkSettings':{'Networks':{'remnawave-network':{}}}}]))
     elif args[:2] == ['container', 'inspect']: sys.exit(0 if os.environ['FAKE_PREVIOUS'] == '1' else 1)
     elif '--format' in args:
         print('kuniman' if 'Labels' in args[args.index('--format')+1] else 'kuniman:previous')
@@ -66,7 +66,7 @@ class DeploymentRecovery(unittest.TestCase):
             executable.chmod(0o755)
         if previous:
             (root / '.deploy').mkdir()
-            (root / '.deploy/current.env').write_text('KUNI_IMAGE=kuniman:previous\nKUNI_NETWORK=existing-network\n')
+            (root / '.deploy/current.env').write_text('KUNI_IMAGE=kuniman:previous\nKUNI_NETWORK=remnawave-network\n')
             shutil.copyfile(root / 'compose.yaml', root / '.deploy/current-compose.yaml')
         environment = {**os.environ, 'PATH': str(binary) + os.pathsep + os.environ['PATH'], 'FAKE_ROOT': str(root), 'FAKE_SCENARIO': scenario, 'FAKE_PREVIOUS': '1' if previous else '0', 'KUNI_CADDY_FILE': str(caddy)}
         environment.pop('KUNI_NETWORK', None)

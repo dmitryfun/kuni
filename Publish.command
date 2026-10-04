@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 project_source="$(cd "$(dirname "$0")" && pwd -P)"
 project_target="$HOME/Project/kuniman"
-for tool in git gh ssh curl; do
+for tool in git ssh curl; do
   command -v "$tool" >/dev/null || { echo "Не найден $tool" >&2; exit 1; }
 done
 if [[ "$project_source" != "$project_target" ]]; then
@@ -12,11 +12,6 @@ if [[ "$project_source" != "$project_target" ]]; then
   mv "$project_source" "$project_target"
 fi
 cd "$project_target"
-if ! gh auth status >/dev/null 2>&1; then
-  gh auth login --hostname github.com --git-protocol https --web
-fi
-[[ "$(gh api user --jq .login)" == dmitryfun ]] || { echo 'Нужен вход GitHub под dmitryfun' >&2; exit 1; }
-gh auth setup-git --hostname github.com
 [[ "$(git remote get-url origin)" == 'https://github.com/dmitryfun/kuni.git' ]] || { echo 'Неожиданный origin' >&2; exit 1; }
 [[ "$(git branch --show-current)" == main && -z "$(git status --porcelain)" ]] || { echo 'Сначала сохрани изменения коммитом в main' >&2; exit 1; }
 git push --set-upstream origin main

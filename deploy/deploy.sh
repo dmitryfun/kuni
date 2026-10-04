@@ -12,6 +12,7 @@ flock -n 9 || { echo 'Another deployment is running' >&2; exit 1; }
 [[ -z "$(git status --porcelain)" ]] || { echo 'Commit the project before deployment' >&2; exit 1; }
 revision="$(git rev-parse --short=12 HEAD)"
 caddy_file="${KUNI_CADDY_FILE:-/opt/remnawave/caddy/Caddyfile}"
+export KUNI_NETWORK="${KUNI_NETWORK:-remnawave-network}"
 [[ -f "$caddy_file" ]] || { echo "Missing Caddyfile: $caddy_file" >&2; exit 1; }
 discovery="$(python3 deploy/discover_caddy.py "$caddy_file")"
 IFS=$'\t' read -r caddy_id caddy_destination KUNI_NETWORK <<< "$discovery"

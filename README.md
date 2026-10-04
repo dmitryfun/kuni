@@ -35,7 +35,7 @@ pnpm test
 pnpm test:deploy
 ```
 
-Первый запуск публикации с Mac — `bash Publish.command`. Сценарий переносит эту папку в `~/Project/kuniman`, предлагает вход в GitHub под `dmitryfun`, отправляет `main` в `dmitryfun/kuni`, затем подключается по SSH. Пароль сервера вводится в штатном скрытом запросе SSH и не хранится в проекте.
+Запуск публикации с Mac — `bash Publish.command`. Сценарий использует настроенный credential helper Git, отправляет `main` в `dmitryfun/kuni`, затем подключается по SSH. Пароль сервера вводится в штатном скрытом запросе SSH и не хранится в проекте. Если GitHub ещё не настроен, выполни `gh auth login --git-protocol https` и `gh auth setup-git`.
 
 На сервере репозиторий размещается в `/root/Project/kuniman`. Приложение работает в отдельном production-контейнере без открытого наружу порта 3000. Существующий Caddy обслуживает HTTPS для `kuniman.me`. Инструкции обновления, проверки и отката: [deploy/README.md](deploy/README.md).
 

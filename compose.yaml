@@ -1,0 +1,34 @@
+name: kuniman
+services:
+  web:
+    image: ${KUNI_IMAGE:?Set KUNI_IMAGE to the built release image}
+    container_name: kuniman-web
+    restart: unless-stopped
+    init: true
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: "1"
+      HOSTNAME: 0.0.0.0
+      PORT: "3000"
+    expose:
+      - "3000"
+    networks:
+      caddy:
+        aliases:
+          - kuniman-web
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 256
+    mem_limit: 512m
+    stop_grace_period: 15s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+networks:
+  caddy:
+    external: true
+    name: ${KUNI_NETWORK:?Set KUNI_NETWORK to an existing network of Caddy}
